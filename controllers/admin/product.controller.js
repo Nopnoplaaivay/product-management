@@ -5,7 +5,6 @@ const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
 
-
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
 
@@ -30,10 +29,12 @@ module.exports.index = async (req, res) => {
   const countProducts = await Product.count(find);
   const objectPagination = paginationHelper(initPagination, req.query, countProducts);
 
+  // Get all products enough for one page
   const products = await Product.find(find)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
 
+  // Render page
   if (products.length > 0) {
     res.render("admin/pages/products/index", {
       pageTitle: "Product List",
@@ -53,7 +54,6 @@ module.exports.index = async (req, res) => {
     }
 
     const href = `${req.baseUrl}?page=1${stringQuery}`;
-    console.log(href)
     res.redirect(href);
   }
 
@@ -75,16 +75,23 @@ module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
   const ids = req.body.ids.split(", ");
 
+  // Gom nhiều case lại với nhau cho tiện
   switch (type) {
     case "active":
     case "inactive":
-      await Product.updateMany({ _id: {$in: ids}}, {status: type});
+      await Product.updateMany({ _id: {$in: ids} }, { status: type} );
       break;
+    case "delete-all":
+      await Product.updateMany({ _id: {$in: ids} }, { 
+        deleted: true,
+        deletedAt: new Date() 
+      });
     default:
       break;
   }
   res.redirect("back");
 }
+
 // [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
 
@@ -94,7 +101,6 @@ module.exports.deleteItem = async (req, res) => {
       deleted: true,
       deletedAt: new Date()
     });
-
 
   res.redirect("back");
 }

@@ -74,7 +74,7 @@ if(buttonsChangeStatus.length > 0) {
   })
 }
 
-const CheckboxMulti = document.querySelector("[checkbox-multi]")
+const CheckboxMulti = document.querySelector("[checkbox-multi]");
 if (CheckboxMulti) {
   const inputCheckAll = CheckboxMulti.querySelector("input[name='checkall']");
   const inputsId = CheckboxMulti.querySelectorAll("input[name='id']")
@@ -108,7 +108,6 @@ if (CheckboxMulti) {
 
 // Form change multi
 const formChangeMulti = document.querySelector("[form-change-multi]");
-// console.log(formChangeMulti);
 if (formChangeMulti) {
   formChangeMulti.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -117,6 +116,13 @@ if (formChangeMulti) {
     const inputsChecked = CheckboxMulti.querySelectorAll(
       "input[name='id']:checked"
     );
+
+    const typeChange = e.target.elements.type.value
+    if (typeChange == "delete-all") {
+      const isConfirm = confirm("Bạn có muốn xóa những bản ghi này?");
+      if (!isConfirm)
+        return;
+    }
 
     if (inputsChecked.length > 0) {
       let ids = [];
@@ -134,7 +140,7 @@ if (formChangeMulti) {
     }
 
     formChangeMulti.submit();
-  })
+  });
 }
 
 // Delete item

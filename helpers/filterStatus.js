@@ -1,4 +1,6 @@
 module.exports = (query) => {
+
+  // Khởi tạo các trạng thái 
   let filterStatus = [
     {
       name: "Tất cả",
@@ -17,6 +19,7 @@ module.exports = (query) => {
     }
   ];
 
+  // Đối chiếu query status gửi về
   if(query.status) {
     const index = filterStatus.findIndex((item) => {
       return item.status == query.status;

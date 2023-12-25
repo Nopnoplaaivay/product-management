@@ -18,6 +18,7 @@ const port = process.env.PORT;
 
 // Bien toan cuc
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+// End bien toan cuc
 
 app.set("views", "./views");
 app.set("view engine", "pug");
@@ -25,12 +26,13 @@ app.set("view engine", "pug");
 app.use(express.static("public"));
 
 app.use(methodOverride('_method'));
-// parse application/x-www-form-urlencoded
+// parse application/x-www-form-urlencoded - Convert data của form để truyền cho biến req.body
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 routeClient(app);
 routeAdmin(app);
+// End Routes
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);
