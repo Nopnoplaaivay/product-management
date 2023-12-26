@@ -27,7 +27,7 @@ app.set("views", "./views");
 app.set("view engine", "pug");
 
 // Flash 
-app.use(cookieParser('KCODE`'));
+app.use(cookieParser('...'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 // End Flash 
@@ -44,5 +44,5 @@ routeAdmin(app);
 // End Routes
 
 app.listen(port, () => {
-    console.log(`App listening on port ${port}`);
+    console.log(`App listening on http://127.0.0.1:${port}`);
 });
