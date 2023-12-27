@@ -23,7 +23,7 @@ const port = process.env.PORT;
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 // End bien toan cuc
 
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 
 // Flash 
@@ -32,7 +32,7 @@ app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 // End Flash 
 
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 app.use(methodOverride('_method'));
 // parse application/x-www-form-urlencoded - Convert data của form để truyền cho biến req.body
