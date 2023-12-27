@@ -183,7 +183,7 @@ module.exports.edit = async (req, res) => {
 
       res.render('admin/pages/products/edit', {
           pageTitle: "Chỉnh sửa sản phẩm",
-          product
+          product: product
           // records: newRecords
       })
   } catch (error) {
@@ -192,6 +192,7 @@ module.exports.edit = async (req, res) => {
   }
 }
 
+// [PATCH] /admin/products/edit/:id
 module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
 
@@ -215,3 +216,29 @@ module.exports.editPatch = async (req, res) => {
   req.flash("success", "Cập nhật sản phẩm thành công")
   res.redirect(`/${systemConfig.prefixAdmin}/products`);
 }
+
+// [GET] /admin/products/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+      const id = req.params.id;
+      const product = await Product.findOne({
+          _id: id,
+          deleted: false
+      })
+
+      // const records = await ProductCategory.find(find)
+
+      // const newRecords = createTree(records)
+
+      res.render('admin/pages/products/detail', {
+          pageTitle: "Chi tiết sản phẩm",
+          product: product
+          // records: newRecords
+      })
+  } catch (error) {
+      req.flash("error", "Không tồn tại sản phẩm!")
+      res.redirect(`/${systemConfig.prefixAdmin}/products`);
+  }
+}
+
+
