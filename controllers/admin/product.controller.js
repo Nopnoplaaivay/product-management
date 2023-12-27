@@ -31,10 +31,20 @@ module.exports.index = async (req, res) => {
     req.query,
     countProducts
   );
+  // End Pagination
+
+  // Sort
+  let sort = {};
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = "desc";
+  }
+  // End Sort
 
   // Get all products enough for one page
   const products = await Product.find(find)
-    .sort({ position: "desc" })
+    .sort(sort)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
 
@@ -158,7 +168,7 @@ module.exports.createPost = async (req, res) => {
   // if (req.file && req.file.filename) {
   //   req.body.thumbnail = `/uploads/${req.file.filename}`;
   // }
-  console.log(req.file)
+  console.log(req.file);
   const product = new Product(req.body);
   await product.save();
 
@@ -168,29 +178,29 @@ module.exports.createPost = async (req, res) => {
 // [GET] /admin/products/edit/:id
 module.exports.edit = async (req, res) => {
   try {
-      const id = req.params.id;
-      const product = await Product.findOne({
-          _id: id,
-          deleted: false
-      })
-      let find = {
-          deleted: false
-      }
+    const id = req.params.id;
+    const product = await Product.findOne({
+      _id: id,
+      deleted: false,
+    });
+    let find = {
+      deleted: false,
+    };
 
-      // const records = await ProductCategory.find(find)
+    // const records = await ProductCategory.find(find)
 
-      // const newRecords = createTree(records)
+    // const newRecords = createTree(records)
 
-      res.render('admin/pages/products/edit', {
-          pageTitle: "Chỉnh sửa sản phẩm",
-          product: product
-          // records: newRecords
-      })
+    res.render("admin/pages/products/edit", {
+      pageTitle: "Chỉnh sửa sản phẩm",
+      product: product,
+      // records: newRecords
+    });
   } catch (error) {
-      req.flash("error", "Không tồn tại sản phẩm!")
-      res.redirect(`/${systemConfig.prefixAdmin}/products`);
+    req.flash("error", "Không tồn tại sản phẩm!");
+    res.redirect(`/${systemConfig.prefixAdmin}/products`);
   }
-}
+};
 
 // [PATCH] /admin/products/edit/:id
 module.exports.editPatch = async (req, res) => {
@@ -202,7 +212,7 @@ module.exports.editPatch = async (req, res) => {
   req.body.position = parseInt(req.body.position);
 
   if (req.file && req.file.filename) {
-      req.body.thumbnail = `/uploads/${req.file.filename}`
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
   }
 
   // const updatedBy = {
@@ -210,35 +220,32 @@ module.exports.editPatch = async (req, res) => {
   //     updatedAt: new Date()
   // }
 
-
   await Product.updateOne({ _id: id }, req.body);
   // console.log(req.body)
-  req.flash("success", "Cập nhật sản phẩm thành công")
+  req.flash("success", "Cập nhật sản phẩm thành công");
   res.redirect(`/${systemConfig.prefixAdmin}/products`);
-}
+};
 
 // [GET] /admin/products/detail/:id
 module.exports.detail = async (req, res) => {
   try {
-      const id = req.params.id;
-      const product = await Product.findOne({
-          _id: id,
-          deleted: false
-      })
+    const id = req.params.id;
+    const product = await Product.findOne({
+      _id: id,
+      deleted: false,
+    });
 
-      // const records = await ProductCategory.find(find)
+    // const records = await ProductCategory.find(find)
 
-      // const newRecords = createTree(records)
+    // const newRecords = createTree(records)
 
-      res.render('admin/pages/products/detail', {
-          pageTitle: "Chi tiết sản phẩm",
-          product: product
-          // records: newRecords
-      })
+    res.render("admin/pages/products/detail", {
+      pageTitle: "Chi tiết sản phẩm",
+      product: product,
+      // records: newRecords
+    });
   } catch (error) {
-      req.flash("error", "Không tồn tại sản phẩm!")
-      res.redirect(`/${systemConfig.prefixAdmin}/products`);
+    req.flash("error", "Không tồn tại sản phẩm!");
+    res.redirect(`/${systemConfig.prefixAdmin}/products`);
   }
-}
-
-
+};
