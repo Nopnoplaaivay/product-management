@@ -10,6 +10,5 @@ module.exports.createPost = (req, res, next) => {
       res.redirect('back');
       return;
   }
-  console.log("Chạy qua đây");
   next();
 }
