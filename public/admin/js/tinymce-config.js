@@ -22,7 +22,6 @@ tinymce.init({
       };
       reader.readAsDataURL(file);
     };
-
     input.click();
   },
 });
