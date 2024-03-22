@@ -61,9 +61,7 @@ if(buttonsChangeStatus.length > 0) {
     button.addEventListener("click", () => {
       const statusCurrent = button.getAttribute("data-status");
       const id = button.getAttribute("data-id");
-
       const statusChange = statusCurrent == "active" ? "inactive" : "active";
-
       const action = path + `/${statusChange}/${id}?_method=PATCH`;
 
       formChangeStatus.action = action;
@@ -205,7 +203,6 @@ if (uploadImage) {
 // End Upload image 
 
 // Sort
-
 const sort = document.querySelector("[sort]");
 if (sort) {
     let url = new URL(window.location.href)
@@ -239,5 +236,4 @@ if (sort) {
         optionSelected.selected = true
     }
 }
-
 // End sort
