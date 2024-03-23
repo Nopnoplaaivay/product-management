@@ -1,6 +1,7 @@
 // [GET] /admin/products
 const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/products-category.model");
+const Account = require("../../models/account.model");
 
 const systemConfig = require("../../config/system");
 const filterStatusHelper = require("../../helpers/filterStatus");
@@ -50,6 +51,15 @@ module.exports.index = async (req, res) => {
     .sort(sort)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
+
+  for (const product of products) {
+    const user = await Account.findOne({
+      _id: product.createdBy.account_id,
+    });
+    if (user) {
+      product.createdBy.accountFullName = user.fullName;
+    }
+  }
 
   // Render page
   if (products.length > 0 || countProducts == 0) {
@@ -160,6 +170,10 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
+
+  const permissions = res.locals.role.permissions;
+  console.log(res.locals.user.id);
+
   const countProduct = await Product.countDocuments();
 
   req.body.price = parseInt(req.body.price);
@@ -168,10 +182,13 @@ module.exports.createPost = async (req, res) => {
   req.body.position = req.body.position
     ? parseInt(req.body.position)
     : countProduct + 1;
+
+  req.body.createdBy = {
+    account_id: res.locals.user.id
+  };
   // if (req.file && req.file.filename) {
   //   req.body.thumbnail = `/uploads/${req.file.filename}`;
   // }
-  console.log(req.file);
   const product = new Product(req.body);
   await product.save();
 
