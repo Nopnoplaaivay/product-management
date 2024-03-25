@@ -27,6 +27,7 @@ module.exports.detail = async (req, res) => {
       status: "active"
     })
 
+    
 
     res.render("client/pages/products/detail", {
       pageTitle: "Chi tiết sản phẩm",

@@ -9,12 +9,21 @@ module.exports.index = async (req, res) => {
     deleted: false,
     status: "active",
   }).limit(6);
-  
+
   const newProductsFeatured = productsHelper.priceNewProducts(productsFeatured);
-  console.log(productsFeatured);
+  //! danh sach sp moi
+  const productsNew = await Product.find({
+    deleted: false,
+    status: "active",
+  })
+    .sort({ position: "desc" })
+    .limit(6);
+
+  const newProductsNew = productsHelper.priceNewProducts(productsNew);
 
   res.render("client/pages/home/index", {
     pageTitle: "Trang chủ",
-    productsFeatured: newProductsFeatured
+    productsFeatured: newProductsFeatured,
+    productsNew: newProductsNew,
   });
 };
